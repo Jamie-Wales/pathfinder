@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Arrays;
 
 
 public class Display extends JFrame {
@@ -18,6 +20,9 @@ public class Display extends JFrame {
 
         grid = new JPanel[rows][cols];
         clicked = new Boolean[rows][cols];
+        for (int i = 0; i < clicked.length; i++) {
+            Arrays.fill(clicked[i], false);
+        }
         setLayout(new GridLayout(rows, cols));
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -33,7 +38,9 @@ public class Display extends JFrame {
 
     }
 
-    private class SquareListener implements MouseListener {
+    private class SquareListener implements MouseListener, MouseMotionListener {
+
+        private boolean pressed = false;
         @Override
         public void mouseClicked(MouseEvent e) {
             JPanel square = (JPanel) e.getSource();
@@ -53,13 +60,14 @@ public class Display extends JFrame {
 
         @Override
         public void mousePressed(MouseEvent e) {
-
+            pressed = true;
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-
+            pressed = false;
         }
+
 
         @Override
         public void mouseEntered(MouseEvent e) {
@@ -70,6 +78,25 @@ public class Display extends JFrame {
 
         @Override
         public void mouseExited(MouseEvent e) {
+            JPanel square = (JPanel) e.getSource();
+            int cols = colIndex(square);
+            int row = rowIndex(square);
+            if (!clicked[row][cols]) {
+                square.setBackground(Color.gray);
+            } else {
+                square.setBackground(Color.black);
+            }
+
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+
         }
     }
 
